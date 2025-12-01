@@ -239,8 +239,7 @@ public class DeepResearchConfiguration {
 			.addNode("human_feedback", node_async(new HumanFeedbackNode()))
 			.addNode("research_team", node_async(new ResearchTeamNode()))
 			.addNode("parallel_executor", node_async(new ParallelExecutorNode(deepResearchProperties)))
-			.addNode("reporter", node_async(new ReporterNode(reporterAgent, reportService, sessionContextService)))
-			.addNode("long_user_profile_memory", node_async(new LongUserProfileMemoryNode(longMemoryAgent)));
+			.addNode("reporter", node_async(new ReporterNode(reporterAgent, reportService, sessionContextService)));
 
 		// 添加并行节点块
 		configureParallelNodes(stateGraph);
@@ -268,8 +267,7 @@ public class DeepResearchConfiguration {
 			.addConditionalEdges("professional_kb_decision", edge_async(new ProfessionalKbDispatcher()),
 					Map.of("professional_kb_rag", "professional_kb_rag", "reporter", "reporter", END, END))
 			.addEdge("professional_kb_rag", "reporter")
-			.addEdge("reporter", "long_user_profile_memory")
-			.addEdge("long_user_profile_memory", END);
+			.addEdge("reporter", END);
 
 		GraphRepresentation graphRepresentation = stateGraph.getGraph(GraphRepresentation.Type.PLANTUML,
 				"workflow graph");
