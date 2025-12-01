@@ -66,7 +66,7 @@ public class ShortUserRoleMemoryNode implements NodeAction {
 			return updated;
 		}
 		logger.info("short_user_role_memory node is running.");
-		ShortTermMemoryProperties.GuideScope guideScope = shortTermMemoryProperties.getGuideScope();
+		ShortTermMemoryProperties.GuideScope guideScope = shortTermMemoryProperties.getUserRoleMemory().getGuideScope();
 		try {
 			// 1. 获取最近n轮用户提问
 			String historyUserMessages = buildHistoryUserMessages(state);
@@ -75,6 +75,10 @@ public class ShortUserRoleMemoryNode implements NodeAction {
 			// 3. 保存或更新短期记忆
 			ShortUserRoleExtractResult mergeResult = saveOrUpdateShortTermMemory(state, currentResult);
 			logger.info("generated short user role memory: {}", JsonUtil.toJson(mergeResult));
+			if (guideScope.equals(ShortTermMemoryProperties.GuideScope.NONE)) {
+				updated.put("short_user_role_next_node", "coordinator");
+				return updated;
+			}
 			if (StringUtils.hasText(historyUserMessages)
 					&& guideScope.equals(ShortTermMemoryProperties.GuideScope.ONCE)) {
 				updated.put("short_user_role_memory", "");
@@ -99,7 +103,7 @@ public class ShortUserRoleMemoryNode implements NodeAction {
 	 */
 	private String buildHistoryUserMessages(OverAllState state) {
 		List<String> recentUserQueries = shortTermMemoryRepository.getRecentUserQueries(StateUtil.getSessionId(state),
-				shortTermMemoryProperties.getHistoryUserMessagesNum());
+				shortTermMemoryProperties.getUserRoleMemory().getHistoryUserMessagesNum());
 		if (CollectionUtils.isEmpty(recentUserQueries)) {
 			Map<String, Object> metaData = new HashMap<>();
 			metaData.put("create_time", LocalDateTime.now(ZoneId.of(ZONE_ASIA_SHANGHAI)));
@@ -202,8 +206,8 @@ public class ShortUserRoleMemoryNode implements NodeAction {
 			messageTrack.stream().map(message -> converter.convert(message.getText())).forEach(historyTracks::add);
 		}
 		// 组装update prompt消息
-		List<Message> updateMessages = Collections
-			.singletonList(TemplateUtil.getShortMemoryUpdateMessage(current, latest, historyTracks));
+		List<Message> updateMessages = Collections.singletonList(TemplateUtil.getShortMemoryUpdateMessage(current,
+				latest, historyTracks, shortTermMemoryProperties.getUserRoleMemory().getUpdateSimilarityThreshold()));
 		ChatResponse updateResponse = callShortMemoryAgent(updateMessages);
 		String updateText = updateResponse.getResult().getOutput().getText();
 		assert updateText != null;

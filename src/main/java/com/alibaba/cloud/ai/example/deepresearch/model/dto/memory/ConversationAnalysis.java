@@ -1,6 +1,5 @@
 package com.alibaba.cloud.ai.example.deepresearch.model.dto.memory;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**

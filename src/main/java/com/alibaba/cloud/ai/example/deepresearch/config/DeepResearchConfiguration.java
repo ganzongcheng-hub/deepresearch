@@ -112,7 +112,7 @@ public class DeepResearchConfiguration {
 	@Autowired
 	private ShortTermMemoryRepository shortTermMemoryRepository;
 
-	@Autowired
+	@Autowired(required = false)
 	private MessageWindowChatMemory messageWindowChatMemory;
 
 	@Autowired(required = false)
@@ -225,7 +225,8 @@ public class DeepResearchConfiguration {
 					node_async(new ShortUserRoleMemoryNode(shortMemoryAgent, shortTermMemoryProperties,
 							shortTermMemoryRepository)))
 			.addNode("coordinator",
-					node_async(new CoordinatorNode(coordinatorAgent, sessionContextService, messageWindowChatMemory)))
+					node_async(new CoordinatorNode(coordinatorAgent, sessionContextService, messageWindowChatMemory,
+							shortTermMemoryProperties)))
 			.addNode("rewrite_multi_query",
 					node_async(new RewriteAndMultiQueryNode(rewriteAndMultiQueryChatClientBuilder,
 							shortTermMemoryRepository, shortTermMemoryProperties)))
@@ -242,8 +243,8 @@ public class DeepResearchConfiguration {
 			.addNode("human_feedback", node_async(new HumanFeedbackNode()))
 			.addNode("research_team", node_async(new ResearchTeamNode()))
 			.addNode("parallel_executor", node_async(new ParallelExecutorNode(deepResearchProperties)))
-			.addNode("reporter", node_async(
-					new ReporterNode(reporterAgent, reportService, sessionContextService, messageWindowChatMemory)));
+			.addNode("reporter", node_async(new ReporterNode(reporterAgent, reportService, sessionContextService,
+					messageWindowChatMemory, shortTermMemoryProperties)));
 
 		// 添加并行节点块
 		configureParallelNodes(stateGraph);

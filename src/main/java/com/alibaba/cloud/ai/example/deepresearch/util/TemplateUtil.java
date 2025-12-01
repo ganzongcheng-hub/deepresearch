@@ -76,8 +76,8 @@ public class TemplateUtil {
 	}
 
 	public static Message getShortMemoryUpdateMessage(ShortUserRoleExtractResult currentExtractResult,
-			ShortUserRoleExtractResult previousExtractResult, List<ShortUserRoleExtractResult> historyExtractTracks)
-			throws IOException {
+			ShortUserRoleExtractResult previousExtractResult, List<ShortUserRoleExtractResult> historyExtractTracks,
+			Double updateSimilarityThreshold) throws IOException {
 		// 读取 短期记忆更新 md 文件
 		ClassPathResource resource = new ClassPathResource("prompts/memory/short/shortmemory-update.md");
 		String template = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
@@ -87,6 +87,8 @@ public class TemplateUtil {
 		systemPrompt = systemPrompt.replace("{{ previous_extract_results }}", JsonUtil.toJson(previousExtractResult));
 		// 替换 {{ history_tracks }} 占位符
 		systemPrompt = systemPrompt.replace("{{ history_extract_track }}", JsonUtil.toJson(historyExtractTracks));
+		// 替换 {{ update_similarity_threshold }} 占位符
+		systemPrompt = systemPrompt.replace("{{ update_similarity_threshold }}", updateSimilarityThreshold.toString());
 		return new SystemMessage(systemPrompt);
 	}
 

@@ -18,26 +18,92 @@ public class ShortTermMemoryProperties {
 	private boolean enabled = true;
 
 	/**
-	 * Scope of short-term memory guidance
+	 * User role memory configuration
 	 */
-	private GuideScope guideScope = GuideScope.EVERY;
+	private UserRoleMemory userRoleMemory;
 
 	/**
-	 * Similarity threshold for updating short-term memory
+	 * Conversation memory configuration
 	 */
-	private Double updateSimilarityThreshold = 0.8;
-
-	/**
-	 * The number of recent user questions for reference in user role extraction
-	 */
-	private int historyUserMessagesNum = 10;
+	private ConversationMemory conversationMemory;
 
 	/**
 	 * Type of memory storage
 	 */
 	private MemoryType memoryType = MemoryType.IN_MEMORY;
 
+	/**
+	 * User role memory configuration
+	 */
+	public static class UserRoleMemory {
+
+		/**
+		 * Scope of short-term memory guidance
+		 */
+		private GuideScope guideScope = GuideScope.EVERY;
+
+		/**
+		 * Similarity threshold for updating short-term memory
+		 */
+		private Double updateSimilarityThreshold = 0.8;
+
+		/**
+		 * The number of recent user questions for reference in user role extraction
+		 */
+		private int historyUserMessagesNum = 10;
+
+		public GuideScope getGuideScope() {
+			return guideScope;
+		}
+
+		public void setGuideScope(GuideScope guideScope) {
+			this.guideScope = guideScope;
+		}
+
+		public Double getUpdateSimilarityThreshold() {
+			return updateSimilarityThreshold;
+		}
+
+		public void setUpdateSimilarityThreshold(Double updateSimilarityThreshold) {
+			this.updateSimilarityThreshold = updateSimilarityThreshold;
+		}
+
+		public int getHistoryUserMessagesNum() {
+			return historyUserMessagesNum;
+		}
+
+		public void setHistoryUserMessagesNum(int historyUserMessagesNum) {
+			this.historyUserMessagesNum = historyUserMessagesNum;
+		}
+
+	}
+
+	/**
+	 * Conversation memory configuration
+	 */
+	public static class ConversationMemory {
+
+		/**
+		 * Maximum number of messages stored in conversation memory
+		 */
+		private Integer maxMessages = 100;
+
+		public Integer getMaxMessages() {
+			return maxMessages;
+		}
+
+		public void setMaxMessages(Integer maxMessages) {
+			this.maxMessages = maxMessages;
+		}
+
+	}
+
 	public enum GuideScope {
+
+		/**
+		 * No guidance
+		 */
+		NONE,
 
 		/**
 		 * Only in the first round of the guiding model
@@ -68,36 +134,28 @@ public class ShortTermMemoryProperties {
 		this.enabled = enabled;
 	}
 
-	public GuideScope getGuideScope() {
-		return guideScope;
-	}
-
-	public void setGuideScope(GuideScope guideScope) {
-		this.guideScope = guideScope;
-	}
-
-	public Double getUpdateSimilarityThreshold() {
-		return updateSimilarityThreshold;
-	}
-
-	public void setUpdateSimilarityThreshold(Double updateSimilarityThreshold) {
-		this.updateSimilarityThreshold = updateSimilarityThreshold;
-	}
-
-	public int getHistoryUserMessagesNum() {
-		return historyUserMessagesNum;
-	}
-
-	public void setHistoryUserMessagesNum(int historyUserMessagesNum) {
-		this.historyUserMessagesNum = historyUserMessagesNum;
-	}
-
 	public MemoryType getMemoryType() {
 		return memoryType;
 	}
 
 	public void setMemoryType(MemoryType memoryType) {
 		this.memoryType = memoryType;
+	}
+
+	public UserRoleMemory getUserRoleMemory() {
+		return userRoleMemory;
+	}
+
+	public void setUserRoleMemory(UserRoleMemory userRoleMemory) {
+		this.userRoleMemory = userRoleMemory;
+	}
+
+	public ConversationMemory getConversationMemory() {
+		return conversationMemory;
+	}
+
+	public void setConversationMemory(ConversationMemory conversationMemory) {
+		this.conversationMemory = conversationMemory;
 	}
 
 }
