@@ -5,6 +5,7 @@ import com.alibaba.cloud.ai.example.deepresearch.model.ApiResponse;
 import jakarta.annotation.Resource;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.messages.Message;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ public class ShortUserRoleMemoryController {
 	@Resource
 	private ShortTermMemoryRepository shortTermMemoryRepository;
 
-	@Resource
+	@Autowired(required = false)
 	private MessageWindowChatMemory messageWindowChatMemory;
 
 	/**
