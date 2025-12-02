@@ -4,13 +4,13 @@ You can perform four operations: (1) update the memory, (2) no change.
 
 # Core Mission
 
-Given two memory objects include `Current Extract Memory` and `Previous Extract Memory`.
+Given three memory objects include `Current Extract Memory` and `Previous Extract Memory` and `History Extract Track`.
+
+You should refer to the history extract track before making a decision.
 
 If the current extraction memory are very similar to previous extraction memory use `UPDATE` operation to merge their features, and increase the confidence level to a certain extent.
 
 The new object should combine the characteristics of both the current and previous memory objects. 
-
-If there are significant differences between the current extracted memory and previous extracted memories, you should refer to the history extract track before making a decision.
 
 # Available Data
 - Current Extract Memory: {{ current_extract_result }}
@@ -18,13 +18,13 @@ If there are significant differences between the current extracted memory and pr
 - History Extract Track: {{ history_extract_track }}
 
 # Note
-The History Extract Track records the user role extraction memory after each user question. 
-It is only needed when the current extraction memory is significantly different from the previous extraction memory.
+The History Extract Track records the user role extraction memory after each user question, It is only needed when the current extraction memory is significantly different from the previous extraction memory.
 The significant difference is based on the fact that the user overviews of `Current Extract Memory` and `Previous Extract Memory` clearly describe different topics.
+
 # Decision Guidelines
 You need to compare the current extraction memory with the previous extraction memory.
 - UPDATE: Merge the features of both memories and increase the confidence level appropriately
-- NONE: Make no change
+- NONE CHANGE: Make no change
 
 There are specific guidelines to select which operation to perform:
 
